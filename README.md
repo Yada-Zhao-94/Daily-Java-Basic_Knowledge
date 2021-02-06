@@ -4,7 +4,7 @@
 * 在浏览器输入www.google.com
 * 首先访问的是离你最近的 DNS 服务器：  
   * Domain Name Service
-  * DNS 服务器记录了 www.google.com 这个域名的 IP 地址是什么
+  * DNS 服务器记录了www.google.com这个域名的 IP 地址是什么
 * 你的浏览器然后向该 IP 发送 http/https 请求，通过 IP 地址就能找到该 服务器/计算机
 * 服务器(Web Server)收到请求，将请求递交给正在 80 端口监听的HTTP Server
   * 比较常用的 HTTP Server 有 Apache, Unicorn, Gunicorn, Uwsgi
