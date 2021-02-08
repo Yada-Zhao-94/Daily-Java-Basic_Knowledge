@@ -8,9 +8,10 @@
 [02-08-2021: 简述TCP三次握手以及四次挥手的流程。为什么需要三次握手以及四次挥手？](#02-08-2021-简述tcp三次握手以及四次挥手的流程为什么需要三次握手以及四次挥手)  
 ## Java & Java框架 
 [02-08-2021: HashMap 与 ConcurrentHashMap 的实现原理是怎样的？ConcurrentHashMap 是如何保证线程安全的？](#02-08-2021-hashmap-与-concurrenthashmap-的实现原理是怎样的concurrenthashmap-是如何保证线程安全的)  
-[02-08-2021: synchronized 关键字底层是如何实现的？它与 Lock 相比优缺点分别是什么？]()  
-[02-08-2021: Java 常见锁有哪些？ReetrantLock 是怎么实现的？]()  
-[02-08-2021: CAS 实现原理是什么？]()  
+[02-08-2021: synchronized 关键字底层是如何实现的？它与 Lock 相比优缺点分别是什么？](#02-08-2021-synchronized-关键字底层是如何实现的它与-lock-相比优缺点分别是什么)  
+[02-08-2021:volatile底层原理](()  
+[02-08-2021: Java 常见锁有哪些？ReetrantLock 是怎么实现的？](#02-08-2021-java-常见锁有哪些reetrantlock-是怎么实现的)  
+[02-08-2021: CAS 实现原理是什么？](#02-08-2021-cas-实现原理是什么)  
 
 ## 02-06-2021: 从输入 URL 到展现页面的全过程
 * 在浏览器输入www.google.com
@@ -102,7 +103,26 @@ ConcurrentHashMap的实现原理：（更详细：JavaGuide p58）
  - 实现线程安全的方式：在 JDK1.7 的时候，ConcurrentHashMap(分段锁) 对整个桶数组进行了分割分段(Segment)，每一把锁只锁容器其中一部分数据，多线程访问容器里不同数据段的数据，就不会存在锁竞争，提高并发访问率。到了 JDK1.8 的时候已经摒弃了Segment的概念，而是直接用Node数组+链表+红黑树的数据结构来实现，并发控制使用 synchronized 和 CAS 来操作。synchronized只锁定当前链表或红黑二叉树的首节点，这样只要hash不冲突，就不会产生并发。
  
 ## 02-08-2021: synchronized 关键字底层是如何实现的？它与 Lock 相比优缺点分别是什么？
+**synchronized 关键字底层是如何实现的？**   
+预备知识：  
+**CAS**.   
+**对象内存布局**，JOL(Java Object Layout)工具.   
+1. markword: 锁的状态，GC标记信息，hashCode.  
+2. klasspointer  
+3. 实例变量  
+4. padding: 8的倍数  
+
+**锁升级过程:**  
+早期jdk，synchronized属于重量级锁，因为申请锁必须通过kernel, 系统调用.  
+**无锁态**  
+**偏向锁**  
+**轻量级，自旋锁**：只要有线程来抢就会升级。执行地块，线程少比较适合。否则很容易大量消耗CPU资源  
+**重量级锁**：不需要消耗CPU资源  
+***
+
+## 02-08-2021:volatile底层原理
 
 ## 02-08-2021: Java 常见锁有哪些？ReetrantLock 是怎么实现的？
  
 ## 02-08-2021: CAS 实现原理是什么？
+追踪到最后是 **lock cmpxchg 汇编指令**
