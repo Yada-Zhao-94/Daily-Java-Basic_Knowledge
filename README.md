@@ -7,7 +7,10 @@
 [02-08-2021: 简述 HTTPS 的加密与认证过程](#02-08-2021-简述-https-的加密与认证过程)    
 [02-08-2021: 简述TCP三次握手以及四次挥手的流程。为什么需要三次握手以及四次挥手？](#02-08-2021-简述tcp三次握手以及四次挥手的流程为什么需要三次握手以及四次挥手)  
 ## Java & Java框架 
-[02-08-2021: HashMap 与 ConcurrentHashMap 的实现原理是怎样的？ConcurrentHashMap 是如何保证线程安全的？](#02-08-2021-hashmap-与-concurrenthashmap-的实现原理是怎样的concurrenthashmap-是如何保证线程安全的)
+[02-08-2021: HashMap 与 ConcurrentHashMap 的实现原理是怎样的？ConcurrentHashMap 是如何保证线程安全的？](#02-08-2021-hashmap-与-concurrenthashmap-的实现原理是怎样的concurrenthashmap-是如何保证线程安全的)  
+[02-08-2021: synchronized 关键字底层是如何实现的？它与 Lock 相比优缺点分别是什么？]()  
+[02-08-2021: Java 常见锁有哪些？ReetrantLock 是怎么实现的？]()  
+[02-08-2021: CAS 实现原理是什么？]()  
 
 ## 02-06-2021: 从输入 URL 到展现页面的全过程
 * 在浏览器输入www.google.com
@@ -88,3 +91,18 @@ HTTPS的加密过程：
 举个例子: A和B打电话，通话即将结束后，A说“我没啥要说的了”，B回答“我知道了”，但是B可能还会有要说的话，A不能要求B跟着自己的节奏结束通话，于是B可能又巴拉巴拉说了一通，最后B说“我说完了”，A回答“知道了”，这样通话才算结束。
 
 ## 02-08-2021: HashMap 与 ConcurrentHashMap 的实现原理是怎样的？ConcurrentHashMap 是如何保证线程安全的？
+HashMap的实现：  
+[我实现的HashMap](https://github.com/Yada-Zhao-94/Daily-Java-Basic_Knowledge/blob/main/MyHashMap.java)
+
+**JDK1.8之后**  
+相比于之前的版本，JDK1.8之后在解决哈希冲突时有了较大的变化，当链表⻓度大于阈值(默认为8)时，将链表转化为红黑树，以减少搜索时间。
+***
+ConcurrentHashMap的实现原理：（更详细：JavaGuide p58）
+ - 底层数据结构：JDK1.7的 ConcurrentHashMap 底层采用分段的数组+链表实现，JDK1.8 采用的数据结构跟HashMap1.8的结构一样，数组+链表/红黑二叉树。
+ - 实现线程安全的方式：在 JDK1.7 的时候，ConcurrentHashMap(分段锁) 对整个桶数组进行了分割分段(Segment)，每一把锁只锁容器其中一部分数据，多线程访问容器里不同数据段的数据，就不会存在锁竞争，提高并发访问率。到了 JDK1.8 的时候已经摒弃了Segment的概念，而是直接用Node数组+链表+红黑树的数据结构来实现，并发控制使用 synchronized 和 CAS 来操作。synchronized只锁定当前链表或红黑二叉树的首节点，这样只要hash不冲突，就不会产生并发。
+ 
+## 02-08-2021: synchronized 关键字底层是如何实现的？它与 Lock 相比优缺点分别是什么？
+
+## 02-08-2021: Java 常见锁有哪些？ReetrantLock 是怎么实现的？
+ 
+## 02-08-2021: CAS 实现原理是什么？
