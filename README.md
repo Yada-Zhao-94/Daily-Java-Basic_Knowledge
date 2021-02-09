@@ -10,7 +10,7 @@
 [02-08-2021: HashMap 与 ConcurrentHashMap 的实现原理是怎样的？ConcurrentHashMap 是如何保证线程安全的？](#02-08-2021-hashmap-与-concurrenthashmap-的实现原理是怎样的concurrenthashmap-是如何保证线程安全的)  
 [02-08-2021: synchronized 关键字底层是如何实现的？它与 Lock 相比优缺点分别是什么？](#02-08-2021-synchronized-关键字底层是如何实现的它与-lock-相比优缺点分别是什么)  
 [02-08-2021: CAS 实现原理是什么？](#02-08-2021-cas-实现原理是什么)  
-[02-09-2021:volatile底层原理](#02-09-2021volatile底层原理)  
+[02-09-2021: volatile底层原理](#02-09-2021-volatile-底层原理)    
 [02-09-2021: Java 常见锁有哪些？ReetrantLock 是怎么实现的？](#02-09-2021-java-常见锁有哪些reetrantlock-是怎么实现的)  
 
 ## 02-06-2021: 从输入 URL 到展现页面的全过程
@@ -112,18 +112,27 @@ ConcurrentHashMap的实现原理：（更详细：JavaGuide p58）
 3. 实例变量  
 4. padding: 8的倍数  
 
-**锁升级过程:**  
+**锁升级过程/JDK1.6后对synchronized的优化:**  
 早期jdk，synchronized属于重量级锁，因为申请锁必须通过kernel, 系统调用.  
 **无锁态**  
 **偏向锁**  
 **轻量级，自旋锁**：只要有线程来抢就会升级。执行地块，线程少比较适合。否则很容易大量消耗CPU资源  
 **重量级锁**：不需要消耗CPU资源  
 ***
+**（1）synchronized同步语句块的情况：**  
+synchronized 同步语句块的实现使用的是 **monitorenter** 和 **monitorexit** 指令，其中 monitorenter 指令指向同步代码块的开始位置，monitorexit指令则指明同步代码块的结束位置。当执行  monitorenter 指令时，线程试图获取锁也就是获取 monitor(monitor对象存在于每个Java对象的对象头中，synchronized 锁便是通过这种方式获取锁的，也是为什么Java中任意对象可以作为锁的原因) 的持有权。当计数器为0则可以成功获取，获取后将锁计数器设为1也就是加1。相应的在执行 monitorexit 指令后，将锁计数器设为0，表明锁被释放。如果获取对象锁失败，那当前线程就要阻塞等待，直到锁被另外一个线程释放为止。  
+**（2）synchronized 修饰方法的的情况：**  
+ACC_SYNCHRONIZED 标识，该标识指明了该方法是一个同步方法，JVM 通过该 ACC_SYNCHRONIZED 访问标志来辨别一个方法是否声明为同步方法，从而执行相应的同步调用。
+***
+**它与 Lock 相比优缺点分别是什么？**  
+代码结构比较复杂时使用，更灵活  
+Lock接口：Lock接口提供了与synchronized相似的同步功能，和synchronized（隐式的获取和释放锁，主要体现在线程进入同步代码块之前需要获取锁退出同步代码块需要释放锁）不同的是，Lock在使用的时候是显示的获取和释放锁。虽然Lock接口缺少了synchronized隐式获取释放锁的便捷性，但是对于锁的操作具有更强的可操作性、可控制性以及提供可中断操作和超时获取锁等机制。
 
 ## 02-08-2021: CAS 实现原理是什么？
 追踪到最后是 **lock cmpxchg 汇编指令**
 
-## 02-09-2021:volatile底层原理
-
 ## 02-09-2021: Java 常见锁有哪些？ReetrantLock 是怎么实现的？
+
+## 02-09-2021: volatile底层原理
+
  
