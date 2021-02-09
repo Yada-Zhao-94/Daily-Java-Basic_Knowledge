@@ -7,11 +7,13 @@
 [02-08-2021: 简述 HTTPS 的加密与认证过程](#02-08-2021-简述-https-的加密与认证过程)    
 [02-08-2021: 简述TCP三次握手以及四次挥手的流程。为什么需要三次握手以及四次挥手？](#02-08-2021-简述tcp三次握手以及四次挥手的流程为什么需要三次握手以及四次挥手)  
 ## Java & Java框架 
-[02-08-2021: HashMap 与 ConcurrentHashMap 的实现原理是怎样的？ConcurrentHashMap 是如何保证线程安全的？](#02-08-2021-hashmap-与-concurrenthashmap-的实现原理是怎样的concurrenthashmap-是如何保证线程安全的)  
+[02-08-2021: HashMap(1.7, 1.8区别) 与 ConcurrentHashMap 的实现原理是怎样的？ConcurrentHashMap 是如何保证线程安全的？](#02-08-2021-hashmap-与-concurrenthashmap-的实现原理是怎样的concurrenthashmap-是如何保证线程安全的)  
+[02-09-2021：hashmap 和 hashtable 的区别是什么？]()  
 [02-08-2021: synchronized 关键字底层是如何实现的？它与 Lock 相比优缺点分别是什么？](#02-08-2021-synchronized-关键字底层是如何实现的它与-lock-相比优缺点分别是什么)  
 [02-08-2021: CAS 实现原理是什么？](#02-08-2021-cas-实现原理是什么)  
 [02-09-2021: volatile底层原理](#02-09-2021-volatile底层原理)    
 [02-09-2021: Java 常见锁有哪些？ReetrantLock 是怎么实现的？](#02-09-2021-java-常见锁有哪些reetrantlock-是怎么实现的)  
+[02-10-2021: 简述 Synchronized，volatile，可重入锁的不同使用场景及优缺点]()
 
 ## 02-06-2021: 从输入 URL 到展现页面的全过程
 * 在浏览器输入www.google.com
@@ -145,6 +147,7 @@ ABA原理：加版本号
 6. 多Jvm环境下多线程操作多个资源类分为分布式锁。
 ***
 ReentrantLock也是mutual exclusive的锁，类似于synchronized这种隐式锁，但有更多的功能，比如可以指定是公平锁。
+
 ## 02-09-2021: volatile底层原理
 相关知识：
 1. 主存和线程的本地内存（在CPU的寄存器上）
@@ -156,3 +159,14 @@ ReentrantLock也是mutual exclusive的锁，类似于synchronized这种隐式锁
 
 **volatile底层原理**：  
 JVM层面，声明为volatile的变量在读写之前之后都加**内存屏障**，屏障两边的指令不可以重排
+
+## 02-09-2021: hashmap 和 hashtable 的区别是什么？
+1. 线程是否安全: HashMap 是非线程安全的，HashTable 是线程安全的; HashTable 内部的方法基本都经过synchronized修饰。(如果你要保证线程安全的话就使用 ConcurrentHashMap 吧!);
+2. 效率: 因为线程安全的问题，HashMap 要比 HashTable 效率高一点。另外，HashTable 基本被淘汰，不要在代码中使用它;
+3. 对Null key和Null value的支持: HashMap 中，null 可以作为键，这样的键只有一个，可以有一个或多个键所对应的值为null。但是在 HashTable 中 put 进的键值只要有一个null，直接抛出NullPointerException。
+4. 初始容量大小和每次扩充容量大小的不同 : 
+ - （1）创建时如果不指定容量初始值，Hashtable 默认的初始大小为11，之后每次扩充，容量变为原来的2n+1。HashMap 默认的初始化大小为16。之后每次扩充，容量变为原来的2倍。
+ - （2）创建时如果给定了容量初始值，那么 Hashtable 会直接使用你给定的大小，而 HashMap 会将其扩充为2的幂次方大小。也就是说 HashMap 总是使用2的幂作为哈希表的大小。
+5. 底层数据结构: JDK1.8 以后的 HashMap 在解决哈希冲突时有了较大的变化，当链表⻓度大于阈值(默认为8)时，将链表转化为红黑树，以减少搜索时间。Hashtable 没有这样的机制。
+
+## 02-10-2021: 简述 Synchronized，volatile，可重入锁的不同使用场景及优缺点
