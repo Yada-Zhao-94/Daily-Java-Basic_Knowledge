@@ -146,5 +146,13 @@ ABA原理：加版本号
 ***
 ReentrantLock也是mutual exclusive的锁，类似于synchronized这种隐式锁，但有更多的功能，比如可以指定是公平锁。
 ## 02-09-2021: volatile底层原理
+相关知识：
+1. 主存和线程的本地内存（在CPU的寄存器上）
+2. volatile作用：
+ - 保证变量可见性，每次使用前必须到主存读取
+ - 防止指令重排序
+3. 懒汉式的singleton中必须使用volatile: 防止JVM指令重排序
+4. happens-before原则（JVM规定指令重排序必须遵守的规则）
 
- 
+**volatile底层原理**：  
+JVM层面，声明为volatile的变量在读写之前之后都加**内存屏障**，屏障两边的指令不可以重排
