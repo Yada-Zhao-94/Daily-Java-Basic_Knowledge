@@ -174,7 +174,8 @@ JVM层面，声明为volatile的变量在读写之前之后都加**内存屏障*
 主要来说主要有三点:
 1. 等待可中断; 正在等待的线程可以选择放弃等待，改为处理其他事情。
 2. 可实现公平锁; ReentrantLock可以指定是公平锁还是非公平锁。而synchronized只能是非公平锁。所谓的公平锁就是先等待的线程先获得锁。
-3. 可实现选择性通知(锁可以绑定多个条件). 线程对象可以注册在指定的Condition(对象监视器)中，从而可以有选择性的进行线程通知，在调度线程上更加灵活。在使用notify()/notifyAll()方法进行通知时，被通知的线程是由JVM选择的，用ReentrantLock类结合Condition实例可以实现“选择性通知”。  
+3. 可实现选择性通知(锁可以绑定多个条件). 线程对象可以注册在指定的Condition(对象监视器)中，从而可以有选择性的进行线程通知，在调度线程上更加灵活。在使用notify()/notifyAll()方法进行通知时，被通知的线程是由JVM选择的，用ReentrantLock类结合Condition实例可以实现“选择性通知”。
+***
 **synchronized关键字和volatile关键字比较**
 1. volatile关键字是线程同步的轻量级实现，所以volatile性能肯定比synchronized关键字要好。 但是**volatile关键字只能用于变量而synchronized关键字可以修饰方法以及代码块**。synchronized关键字在JavaSE1.6之后进行了主要包括为了减少获得锁和释放锁带来的性能消耗而引入的偏向锁和轻量级锁以及其它各种优化之后执行效率有了显著提升，实际开发中使用synchronized关键字的场景还是更多一些。
 2. 多线程访问volatile关键字不会发生阻塞，而synchronized关键字可能会发生阻塞
