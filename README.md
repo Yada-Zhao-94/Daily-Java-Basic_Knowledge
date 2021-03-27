@@ -339,7 +339,7 @@ https://www.cnblogs.com/zrtqsk/p/3735273.html 还包括了**容器的创建流�
 4. 与上面的类似，如果实现了其他 *.Aware 接口，就调用相应的方法。  
 5. **Before前置增强**: 如果有任何与Bean相关联的**BeanPostProcessor**s，Spring会在postProcesserBeforeInitialization()方法内调用它们。(AOP,动态代理)  
 6. 如果Bean实现InitializingBean接口，调用它的afterPropertySet()方法。  
-7. 如果Bean在配置文件中的定义包含**init-method**属性，执行指定的方法。  
+7. 如果Bean在配置文件中的定义包含init-method属性，执行指定的方法。  
 8. **After后置增强**: 如果有BeanPostProcessors和Bean关联，这些bean的postProcessAfterInitialization() 方法将被调用。(AOP,动态代理)   
 
     得到完整对象，context.getBean()   
