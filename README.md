@@ -36,7 +36,8 @@
 todo: JVM内存模型与内存区域不同  
 ***
 **Spring：**  
-[简述 Spring AOP 的原理](#简述-spring-aop-的原理)
+[简述 Spring bean 的生命周期](#简述-spring-bean-的生命周期)  
+[简述 Spring AOP 的原理](#简述-spring-aop-的原理)  
 
 ## 02-06-2021: 从输入 URL 到展现页面的全过程
 * 在浏览器输入www.google.com
@@ -329,5 +330,20 @@ java编写，加载程序所在的目录
 JVM在程序运行过程当中，会创建大量的对象，这些对象，大部分是短周期的对象，小部分是长周期的对象，对于短周期的对象，需要频繁地进行垃圾回收以保证无用对象尽早被释放掉，对于长周期对象，则不需要频率垃圾回收以确保无谓地垃圾扫描检测。为解决这种矛盾，Sun JVM的内存管理采用分代的策略。-> 分代收集算法  
 新生代：又被划分为三个区域：Eden、From Survivor、To Survivor。  
 大部分情况，对象都会首先在 Eden 区域分配，在一次新生代垃圾回收后，如果对象还存活，则会进入 s0 或者 s1，并且对象的年龄还会加1(Eden区 -> Survivor区后对象的初始年龄变为1)，当它的年龄增加到一定程度(默认为15岁)，就会被晋升到老年代中。
+
+## 简述 Spring bean 的生命周期
+https://www.cnblogs.com/zrtqsk/p/3735273.html 还包括了**容器的创建流程**  
+1. Spring容器从XML文件中读取Bean的定义，并实例化Bean。   
+2. Spring根据Bean的定义填充所有的属性。  
+3. (**3~4：Aware**) 如果Bean实现了BeanNameAware接口，Spring传递Bean的ID到setBeanName()方法。 (Aware接口：当需要在普通对象中获取容器中相关的内部对象时，可以使用Aware接口)  
+4. 与上面的类似，如果实现了其他 *.Aware 接口，就调用相应的方法。  
+5. **Before前置增强**: 如果有任何与Bean相关联的**BeanPostProcessor**s，Spring会在postProcesserBeforeInitialization()方法内调用它们。(AOP,动态代理)  
+6. 如果Bean实现InitializingBean接口，调用它的afterPropertySet()方法。  
+7. 如果Bean在配置文件中的定义包含**init-method**属性，执行指定的方法。  
+8. **After后置增强**: 如果有BeanPostProcessors和Bean关联，这些bean的postProcessAfterInitialization() 方法将被调用。(AOP,动态代理)  
+-------------------------------------------------------
+得到完整对象，context.getBean()    
+9. 如果Bean实现了DisposableBean接口，它将调用destroy()方法。  
+10. 当要销毁Bean的时候，如果Bean在配置文件中的定义包含destroy-method属性，执行指定的方法。
 
 ## 简述 Spring AOP 的原理
