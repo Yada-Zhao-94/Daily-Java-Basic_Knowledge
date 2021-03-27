@@ -340,10 +340,12 @@ https://www.cnblogs.com/zrtqsk/p/3735273.html 还包括了**容器的创建流�
 5. **Before前置增强**: 如果有任何与Bean相关联的**BeanPostProcessor**s，Spring会在postProcesserBeforeInitialization()方法内调用它们。(AOP,动态代理)  
 6. 如果Bean实现InitializingBean接口，调用它的afterPropertySet()方法。  
 7. 如果Bean在配置文件中的定义包含**init-method**属性，执行指定的方法。  
-8. **After后置增强**: 如果有BeanPostProcessors和Bean关联，这些bean的postProcessAfterInitialization() 方法将被调用。(AOP,动态代理)  
-   ||
-   \/
-得到完整对象，context.getBean()    
+8. **After后置增强**: 如果有BeanPostProcessors和Bean关联，这些bean的postProcessAfterInitialization() 方法将被调用。(AOP,动态代理)   
+
+    得到完整对象，context.getBean() 
+    ---
+    关闭容器 
+    
  9. 如果Bean实现了DisposableBean接口，它将调用destroy()方法。  
  10. 当要销毁Bean的时候，如果Bean在配置文件中的定义包含destroy-method属性，执行指定的方法。
 
