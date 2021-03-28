@@ -370,7 +370,7 @@ https://www.cnblogs.com/zrtqsk/p/3735273.html 还包括了**容器的创建流�
 ```Java
 public class HungrySingleton {
 
-	 private final static HungrySingleton hungrySingleton = new HungrySingleton();
+  private final static HungrySingleton hungrySingleton = new HungrySingleton();
 
   private HungrySingleton() {
 
