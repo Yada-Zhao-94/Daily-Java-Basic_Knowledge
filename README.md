@@ -382,7 +382,7 @@ public class HungrySingleton {
 
 }
 ```
-饿汉：
+懒汉式：
 
 
 ## MySQL为什么使用B+树来作索引，对比B树它的优点和缺点是什么？
