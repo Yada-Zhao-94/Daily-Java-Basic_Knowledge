@@ -39,6 +39,13 @@ todo: JVM内存模型与内存区域不同
 [简述 Spring bean 的生命周期](#简述-spring-bean-的生命周期)  
 [简述 Spring AOP 的原理](#简述-spring-aop-的原理)  
 
+## 数据库
+**MySQL:**  
+[MySQL为什么使用B+树来作索引，对比B树它的优点和缺点是什么？](#)
+***
+**Redis:**
+
+
 ## 02-06-2021: 从输入 URL 到展现页面的全过程
 * 在浏览器输入www.google.com
 * 首先访问的是离你最近的 DNS 服务器：  
@@ -355,3 +362,6 @@ https://www.cnblogs.com/zrtqsk/p/3735273.html 还包括了**容器的创建流�
 4. proceed()先执行全部拦截器，最后执行目标方法  
 5. 关键在与**拦截器invoke()方法**，Before拦截器先执行advice方法再调用proceed()，After拦截器先proceed()后执行advice方法  
 6. 由于拦截器invoke()的递归调用，便出现 before -> 目标对象调用 -> after AOP执行顺序  
+
+## MySQL为什么使用B+树来作索引，对比B树它的优点和缺点是什么？
+
