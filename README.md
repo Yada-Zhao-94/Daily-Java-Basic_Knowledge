@@ -377,13 +377,64 @@ public class HungrySingleton {
   }
 
   public static HungrySingleton getInstance() {
-    return this.hungrySingleton;
+    return hungrySingleton;
   }
 
 }
 ```
-懒汉式：
-
+双重检测锁模式，DCL懒汉：  
+**volatile**必须加，防止test = new Test() 该句指令重排序  
+1. 分派内存空间
+2. 执行构造方法，初始化对象
+3. 把对象指向这个空间  
+1 -> 3 -> 2 导致其他线程得到一个还未完成初始化的对象  
+```Java
+class Test {
+	public volatile static Test test;
+	
+	private Test() {
+		System.out.println(Thread.currentThread().getName() + " is newing instance");
+	}
+	
+	public static Test getInstance() {
+		if (test == null) {
+			synchronized(Test.class) {
+				if (test == null) {
+					test = new Test();
+				}
+			}
+		}
+		return test;
+	}
+	
+	public static void main(String[] args) {
+		for(int i = 0; i < 10; i++) {
+			new Thread(() -> {
+				Test.getInstance();
+			}).start();
+		}
+	}
+}
+```
+静态内部类：
+静态内部类在使用时才加载。StaticInnerClassSingleton类在类加载时不会实例化StaticInnerClassSingleton对象，而在第一次调用getInstance()方法时，将加载静态内部类StaticInnerClass，并初始化静态成员变量staticInnerClassSingleton，由java虚拟机保证其线程安全，使得成员变量staticInnerClassSingleton只能初始化一次。且getInstance()方法没有线程锁定，因此不会影响性能  
+通过这种方式实现的懒汉单例模式，既实现了延迟加载，也保证了线程安全，且不影响系统性能
+```Java
+public class StaticInnerClassSingleton {
+ 
+    private StaticInnerClassSingleton(){
+ 
+    }
+ 
+    private static class StaticInnerClass{
+        private static StaticInnerClassSingleton staticInnerClassSingleton = new StaticInnerClassSingleton();
+    }
+ 
+    public static StaticInnerClassSingleton getInstance(){
+        return StaticInnerClass.staticInnerClassSingleton;
+    }
+}
+```
 
 ## MySQL为什么使用B+树来作索引，对比B树它的优点和缺点是什么？
 
