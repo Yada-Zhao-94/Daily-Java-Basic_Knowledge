@@ -27,7 +27,8 @@
 [02-09-2021: volatile底层原理](#02-09-2021-volatile底层原理)    
 [02-09-2021: Java 常见锁有哪些？ReetrantLock 是怎么实现的？](#02-09-2021-java-常见锁有哪些reetrantlock-是怎么实现的)  
 [02-10-2021: 简述 Synchronized，volatile，可重入锁的不同使用场景及优缺点](#02-10-2021-简述-synchronizedvolatile可重入锁的不同使用场景及优缺点)  
-[02-11-2021: Java 线程间有多少通信方式？](#02-11-2021java-线程间有多少通信方式)   
+[02-11-2021: Java 线程间有多少通信方式？](#02-11-2021java-线程间有多少通信方式)  
+[Java 是如何实现线程安全的，哪些数据结构是线程安全的？](#java-是如何实现线程安全的哪些数据结构是线程安全的)
 ***
 **JVM：**  
 [02-18-2021: Java 中垃圾回收机制中如何判断对象需要回收？常见的 GC 回收算法有哪些？](#02-18-2021-java-中垃圾回收机制中如何判断对象需要回收常见的-gc-回收算法有哪些)   
@@ -436,5 +437,22 @@ public class StaticInnerClassSingleton {
 }
 ```
 
+## Java是如何实现线程安全的，哪些数据结构是线程安全的？
+Java是如何实现线程安全的?
+ - synchronized关键字
+ - volatile关键字
+ - 使用Atomic变量: 如AtomicInteger，使用这些类来声明变量可以保证对其操作具有原子性来保证线程安全。
+ - 使用Lock
+ - ThreadLocal: 如果你创建了一个ThreadLocal变量，那么访问这个变量的每个线程都会有这个变量的本地副本。
+***
+哪些数据结构是线程安全的?  
+**HashTable，ConcurrentHashMap，CopyOnWriteArrayList，CopyOnWriteArraySet，ConcurrentLinkedQueue，Vector，StringBuffer**等  
+它们的功能和应用场景参考：https://blog.csdn.net/qq_29229567/article/details/87799838
+
 ## MySQL为什么使用B+树来作索引，对比B树它的优点和缺点是什么？
+B+树有读写上的性能优点，适配磁盘的访问模式。（减少磁盘读取页的寻址时间）  
+
+mysql为什么使用B+树而不是B树作为索引？  
+ - 由于mysql通常将数据存放在磁盘中，读取数据就会产生磁盘IO消耗。而B+树的非叶子节点中不保存数据，B树中非叶子节点会保存数据，通常一个节点大小会设置为磁盘页大小，这样B+树每个节点可放更多的key，B树则更少。这样就造成了，B树的高度会比B+树更高，从而会产生更多的磁盘IO消耗。
+ - B+树叶子节点构成链表，更利用范围查找和排序。而B树进行范围查找和排序则要对树进行递归遍历。
 
