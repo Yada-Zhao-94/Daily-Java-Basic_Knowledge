@@ -55,8 +55,8 @@
 **Redis:**
 
 ## 操作系统
-[I/O多路复用中 select, poll, epoll之间有什么区别，各自支持的最大描述符上限以及原因是什么？]()
-[简述 socket 中 select 与 epoll 的使用场景以及区别，epoll 中水平触发以及边缘触发有什么不同？]()
+[I/O多路复用中 select, poll, epoll之间有什么区别，各自支持的最大描述符上限以及原因是什么？](#io多路复用中-select-poll-epoll之间有什么区别各自支持的最大描述符上限以及原因是什么)  
+[简述 socket 中 select 与 epoll 的使用场景以及区别，epoll 中水平触发以及边缘触发有什么不同？](#简述-socket-中-select-与-epoll-的使用场景以及区别epoll-中水平触发以及边缘触发有什么不同)  
 
 ## 02-06-2021: 从输入 URL 到展现页面的全过程
 * 在浏览器输入www.google.com
