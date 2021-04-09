@@ -55,7 +55,7 @@
 [简述 MySQL 常见索引类型，介绍一下覆盖索引](#简述-mysql-常见索引类型介绍一下覆盖索引)  
 [数据库如何设计索引，如何优化查询？](#数据库如何设计索引如何优化查询)  
 [简述什么是最左匹配原则](#简述什么是最左匹配原则)  
-[MySQL中 InnoDB 和 MylSAM 的区别是什么？]()  
+[MySQL中 InnoDB 和 MylSAM 的区别是什么？](mysql中-innodb-和-mylsam-的区别是什么)  
 ***
 **Redis:**
 
@@ -592,9 +592,11 @@ MyISAM是MySQL的默认数据库引擎(5.5版之前)。虽然性能极佳，而�
 2. 是否支持事务和崩溃后的安全恢复: MyISAM 强调的是性能，每次查询具有原子性,其执行速度 比InnoDB类型更快，但是不提供事务支持。但是InnoDB提供事务支持事务，外部键等高级数据库功能。具有事务(commit)、回滚(rollback)和崩溃修复能力(crash recovery capabilities) 的事务安全(transaction-safe (ACID compliant))型表。
 3. 是否支持外键: MyISAM不支持，而InnoDB支持。
 4. 是否支持MVCC:仅 InnoDB 支持。应对高并发事务, MVCC比单纯的加锁更高效;MVCC只在 READ COMMITTED 和 REPEATABLE READ 两个隔离级别下工作;MVCC可以使用乐观(optimistic)锁和悲观(pessimistic)锁来实现;各数据库中MVCC实现并不统一。
-5. ....
+5. ....  
 一般情况下我们选择 InnoDB 都是没有问题的，但是某些情况下你并不在乎可扩展能力和并发能力，也不需要事务支持，也不在乎崩溃后的安全恢复问题的话，选择MyISAM也是一个不错的选择。但是一般情况下，我们都是需要考虑到这些问题的。
 
 ## 数据库如何设计索引，如何优化查询？ 
+
+
 ***
 ## 简述 JVM 的内存模型 JVM 内存是如何对应到操作系统内存的？
