@@ -171,10 +171,8 @@ ConcurrentHashMap的实现原理：（更详细：JavaGuide p58）
 **轻量级，自旋锁**：只要有线程来抢就会升级成自旋锁。执行地块，线程少比较适合。否则很容易大量消耗CPU资源  
 **重量级锁**：不需要消耗CPU资源  
 ***
-**（1）synchronized同步语句块的情况：**  
 synchronized 同步语句块的实现使用的是 **monitorenter** 和 **monitorexit** 指令，其中 monitorenter 指令指向同步代码块的开始位置，monitorexit指令则指明同步代码块的结束位置。当执行  monitorenter 指令时，线程试图获取锁也就是获取 monitor(monitor对象存在于每个Java对象的对象头中，synchronized 锁便是通过这种方式获取锁的，也是为什么Java中任意对象可以作为锁的原因) 的持有权。当计数器为0则可以成功获取，获取后将锁计数器设为1也就是加1。相应的在执行 monitorexit 指令后，将锁计数器设为0，表明锁被释放。如果获取对象锁失败，那当前线程就要阻塞等待，直到锁被另外一个线程释放为止。  
-**（2）synchronized 修饰方法的的情况：**  
-ACC_SYNCHRONIZED 标识，该标识指明了该方法是一个同步方法，JVM 通过该 ACC_SYNCHRONIZED 访问标志来辨别一个方法是否声明为同步方法，从而执行相应的同步调用。
+**monitor实现依赖于底层操作系统的Mutex Lock**，重量级锁，性能低。
 ***
 **它与 Lock 相比优缺点分别是什么？**  
 代码结构比较复杂时使用，更灵活  
