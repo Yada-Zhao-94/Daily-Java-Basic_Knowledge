@@ -540,7 +540,7 @@ select会给内核传入fdset（表示监听了哪些socket ID），若该fd就�
 3.监听个数有上限  
   
 poll基本和select相同，优点是监听的fd没有数量限制  
-epoll是select和poll的增强版本。相对来说epoll更加灵活，没有描述符限制。epoll使用一个文件描述符管理多个描述符，将用户关心的文件描述符的事件存放到内核的一个事件表中，这样在用户空间和内核空间的copy只需一次。  
+epoll是select和poll的增强版本。相对来说epoll更加灵活，没有描述符限制。epoll使用一个文件描述符管理多个描述符，将用户关心的文件描述符的事件存放到内核的一个事件表中，**用户和内核的共享空间，这样在用户空间和内核空间的copy只需一次（select和epoll的主要区别，在于不需要）**。  
 ***
 select支持的fd数是固定的，默认一般为1024，用一个常数FD_SETSIZE定义，如果要monitor更多的fd，需要修改这个常数，并且重新编译内核，一般如果要monitor超过1024的fd，推荐使用poll/epoll  
 poll和epoll，因为他们monitor的fd list是通过数组或者说链表来保存，所以没有数量限制  
