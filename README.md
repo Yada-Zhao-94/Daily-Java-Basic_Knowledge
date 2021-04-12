@@ -609,7 +609,7 @@ MyISAM是MySQL的默认数据库引擎(5.5版之前)。虽然性能极佳，而�
 ## 数据库如何设计索引，如何优化查询？ 
 先从大方向回答 1）如何监控慢查询  2）如何定位慢查询 3）如何分析慢查询，慢查询出现的可能原因  4） 如何解决  
 [什么是慢查、如何监控？如何排查？](https://mp.weixin.qq.com/s/tXTLMCiVpEnnmhUclYR19Q)  
-通过慢查日志，监控脚本等定位到慢查询 -> Explain分析SQL语句
-Explain工具的列、索引最佳实践、MySQL优化器可能会不走索引的情况、Order by & Group by如何利用索引(filesort)、分页查询优化、join关联查询优化（表关联算法NLJ & BNL）（1.关联字段加索引 2.小表驱动大表）等等 见课件笔记。
+通过慢查日志，监控脚本等定位到慢查询 -> Explain分析SQL语句  
+Explain工具的列、索引最佳实践、MySQL优化器可能会不走索引的情况、Order by & Group by如何利用索引(filesort)、分页查询优化、join关联查询优化（表关联算法NLJ & BNL）（1.关联字段加索引 2.小表驱动大表）等等 见课件笔记。  
 
 ## 简述 Java AQS 的原理以及使用场景
