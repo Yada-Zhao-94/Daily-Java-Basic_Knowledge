@@ -278,8 +278,18 @@ ReentrantLock也是mutual exclusive的锁，类似于synchronized这种隐式锁
  - notifyAll()：通知所有等待的线程
 
 ## 02-12-2021: 简述 Java 的反射机制及其应用场景
-注解：也叫元数据。一种代码级别的说明。它是JDK1.5及以后版本引入的一个特性，与类、接口、枚举是在同一个层次。它可以声明在包、类、字段、方法、局部变量、方法参数等的前面，用来对这些元素进行说明，注释。  
-内置注解，元注解，自定义注解。  
+注解：@Interface 作用就是提供属性，代替配置文件。  
+JDK内置注解，元注解(注解的注解，如**Target代表作用域，Retention代表保留到编码、编译、运行时等等**)，自定义注解。  
+例子：自定义@MyJunit注解  
+```Java
+@Target(value=ElementType.METHOD)//作用域为方法
+@Retention(RetentionPolicy.RUNTIME)//注解信息保留到运行时
+public @interface MyJunit {
+
+}
+```
+在一个类的方法上加上@MyJunit -> 在main函数里利用反射对有注解的方法进行操作（注解已经依附于Class对象上）  
+**boolean flag = method.isAnnotationPresent(MyJunit.class)**
 ***
 反射：类加载过程：加载 -> 验证 -> 准备 -> 解析 -> 初始化。**Class对象是存放在堆区的**，不是方法区，这点很多人容易犯错。类的元数据（元数据并不是类的Class对象。Class对象是加载的最终产品，类的方法代码，变量名，方法名，访问权限，返回值等等都是在方法区的）才是存在方法区的。  
 [反射机制及应用场景](https://github.com/Snailclimb/JavaGuide/blob/master/docs/java/basis/%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6.md)
