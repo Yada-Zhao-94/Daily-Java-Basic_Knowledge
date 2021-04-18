@@ -424,15 +424,30 @@ JVM在程序运行过程当中，会创建大量的对象，这些对象，大�
 大部分情况，对象都会首先在 Eden 区域分配，在一次新生代垃圾回收后，如果对象还存活，则会进入 s0 或者 s1，并且对象的年龄还会加1(Eden区 -> Survivor区后对象的初始年龄变为1)，当它的年龄增加到一定程度(默认为15岁)，就会被晋升到老年代中。
 
 ## 简述 Spring bean 的生命周期
+创建Bean的流程:  
+class（UserService） -> 推断构造方法(从容器中找Bean，先by type 再by name，Bean的单例 != 单例模式，同class有不同名的Bean) -> 实例化 -> 对象 -> 属性填充(如@Autowired) ||-> 初始化(比如某属性需要从数据库读取，afterPropertiesSet) -> AOP -> 代理对象 -> Bean  
+**Cglib生成的代理对象**的大致示意:  
+```Java
+Class UserServiceProxy extends UserService {
+    private UserService target;
+    
+    // 重写
+    public void test() {
+    	Aspect.before();
+	target.test();
+    }
+}
+```
+  
 https://www.cnblogs.com/zrtqsk/p/3735273.html 还包括了**容器的创建流程**  
 1. Spring容器从XML文件中读取Bean的定义，并实例化Bean。   
 2. Spring根据Bean的定义填充所有的属性。  
 3. (**3~4：Aware**) 如果Bean实现了BeanNameAware接口，Spring传递Bean的ID到setBeanName()方法。 (Aware接口：当需要在普通对象中获取容器中相关的内部对象时，可以使用Aware接口)  
 4. 与上面的类似，如果实现了其他 *.Aware 接口，就调用相应的方法。  
-5. **Before前置增强**: 如果有任何与Bean相关联的**BeanPostProcessor**s，Spring会在postProcesserBeforeInitialization()方法内调用它们。(AOP,动态代理)  
-6. 如果Bean实现InitializingBean接口，调用它的afterPropertySet()方法。  
+5. **Before前置增强，初始化前**: 如果有任何与Bean相关联的**BeanPostProcessor**s，Spring会在postProcesserBeforeInitialization()方法内调用它们。(AOP,动态代理)  
+6. **(初始化)** 如果Bean实现InitializingBean接口，调用它的afterPropertySet()方法。  
 7. 如果Bean在配置文件中的定义包含init-method属性，执行指定的方法。  
-8. **After后置增强**: 如果有BeanPostProcessors和Bean关联，这些bean的postProcessAfterInitialization() 方法将被调用。(AOP,动态代理)   
+8. **After后置增强，初始化后**: 如果有BeanPostProcessors和Bean关联，这些bean的postProcessAfterInitialization() 方法将被调用。(AOP,动态代理)   
 
     得到完整对象，context.getBean()   
     关闭容器   
@@ -441,6 +456,8 @@ https://www.cnblogs.com/zrtqsk/p/3735273.html 还包括了**容器的创建流�
  10. 当要销毁Bean的时候，如果Bean在配置文件中的定义包含destroy-method属性，执行指定的方法。
 
 ## 简述 Spring AOP 的原理
+TODO: jdk，Cglib实现动态代理
+***
 1. IOC容器得到目标代理对象：Spring AOP就是基于动态代理的，如果要代理的对象实现了某个接口，那么Spring AOP会使用JDK Proxy，去创建代理对象。而对于没有实现接口的对象，Spring AOP会使用 Cglib生成一个被代理对象的子类来作为代理。  
 2. proxy调用方法触发CglibAopProxy.intercept()  
 3. intercept()：获取所有的拦截器，排好序后做出拦截器链（拦截器为增强代码的包装）。传入拦截器链和目标对象，new CglibMethodInvocation()并调用proceed()  
