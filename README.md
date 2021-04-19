@@ -456,7 +456,9 @@ https://www.cnblogs.com/zrtqsk/p/3735273.html 还包括了**容器的创建流�
  10. 当要销毁Bean的时候，如果Bean在配置文件中的定义包含destroy-method属性，执行指定的方法。
 
 ## 简述 Spring AOP 的原理
-TODO: jdk，Cglib实现动态代理
+JDK实现：Proxy.newProxyInstance() -> ProxyGenerator.generateProxyClass()生成字节码，继承Proxy，实现接口，将原方法重写为调用invoke()  
+Cglib实现：动态地生成要代理对象的子类，子类要重写被代理类所有不是final的方法。在子类中使用方法拦截技术拦截所有父类方法的调用（回调MethodInterceptor接口方法拦截），顺势织入自己的横切逻辑。比jdk动态代理要快。  
+Cglib底层：使用字节码处理框架ASM，来处理转化字节码并生成新的类。  
 ***
 1. IOC容器得到目标代理对象：Spring AOP就是基于动态代理的，如果要代理的对象实现了某个接口，那么Spring AOP会使用JDK Proxy，去创建代理对象。而对于没有实现接口的对象，Spring AOP会使用 Cglib生成一个被代理对象的子类来作为代理。  
 2. proxy调用方法触发CglibAopProxy.intercept()  
