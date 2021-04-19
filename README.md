@@ -355,7 +355,31 @@ https://blog.csdn.net/ailunlee/article/details/97831912
 ## 02-18-2021: Java 中垃圾回收机制中如何判断对象需要回收？常见的 GC 回收算法有哪些？
 如何判断对象不再被引用：
 1. 引用计数法（不能解决循环引用）
-2. 可达性分析算法：GC roots  
+```Java
+publicclassReferenceCountingGc{
+    Object instance = null;
+
+    public static void main(String[] args) {
+        ReferenceCountingGc objA = new ReferenceCountingGc();
+	ReferenceCountingGc objB = new ReferenceCountingGc();
+	objA.instance = objB;
+	objB.instance = objA;
+	objA = null;
+	objB = null;
+    }
+}
+```
+2. 可达性分析算法：这个算法的基本思想就是通过一系列的称为 “GC Roots” 的对象作为起点，从这些节点开始向下搜索，找到的对象都标记为非垃圾对象，其余未标记的对象都是垃圾对象  
+GC Roots根节点:线程栈的本地变量、静态变量、本地方法栈的变量等等  
+***
+Java的引用类型：强引用、软引用、弱引用、虚引用  
+软引用:将对象用SoftReference软引用类型的对象包裹，正常情况不会被回收，但是GC做完后发现释放不出空间存放新的对象，则会把这些软引用的对象回收掉。软引用可用来实现内存敏感的高速缓存。  
+```Java
+public static SoftReference<User> user = new SoftReference<User>(new User());
+```
+软引用在实际中有重要的应用，例如浏览器的后退按钮。按后退时，这个后退时显示的网页内容是重新进行请求还是从缓存中取出呢?这就要看具体的实现策略了。  
+(1)如果一个网页在浏览结束时就进行内容的回收，则按后退查看前面浏览过的页面时，需要重新构建  
+(2)如果将浏览过的网页存储到内存中会造成内存的大量浪费，甚至会造成内存溢出
 ***
 常见的GC回收算法:(参考图:JavaGuide P109)  
 标记-清除算法  
