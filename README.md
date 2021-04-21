@@ -785,7 +785,7 @@ G1 (Garbage-First)是一款面向服务器的垃圾收集器,主要针对配备�
 案例分析：Kafka，解决大内存垃圾回收时间过长的问题。
 
 ## JVM调优工具 & JVM调优实战
-
+Jmap, Jstack, Jinfo, Jstat等各种命令，Java Visualvm等工具，GC日志等详细见资料
 
 ## 简述 Redis 持久化中 RDB 以及 AOF 方案的优缺点
 
