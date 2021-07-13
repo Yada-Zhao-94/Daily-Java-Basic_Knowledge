@@ -468,37 +468,14 @@ JVM在程序运行过程当中，会创建大量的对象，这些对象，大�
  - ....详细见资料
 
 ## 简述 Spring bean 的生命周期
-创建Bean的流程:  
-class（UserService） -> 推断构造方法(从容器中找Bean，先by type 再by name，Bean的单例 != 单例模式，同class有不同名的Bean) -> 实例化 -> 对象 -> 属性填充(如@Autowired) ||-> 初始化(比如某属性需要从数据库读取，afterPropertiesSet) -> AOP -> 代理对象 -> Bean  
-**Cglib生成的代理对象**的大致示意:  
-```Java
-Class UserServiceProxy extends UserService {
-    private UserService target;
-    
-    // 重写
-    public void test() {
-    	Aspect.before();
-	target.test();
-    }
-}
-```
-  
-https://www.cnblogs.com/zrtqsk/p/3735273.html 还包括了**容器的创建流程**  
-1. Spring容器从XML文件中读取Bean的定义，并实例化Bean。   
-2. Spring根据Bean的定义填充所有的属性。  
-3. (**3~4：Aware**) 如果Bean实现了BeanNameAware接口，Spring传递Bean的ID到setBeanName()方法。 (Aware接口：当需要在普通对象中获取容器中相关的内部对象时，可以使用Aware接口)  
-4. 与上面的类似，如果实现了其他 *.Aware 接口，就调用相应的方法。  
-5. **Before前置增强，初始化前**: 如果有任何与Bean相关联的**BeanPostProcessor**s，Spring会在postProcesserBeforeInitialization()方法内调用它们。(AOP,动态代理)  
-6. **(初始化)** 如果Bean实现InitializingBean接口，调用它的afterPropertySet()方法。  
-7. 如果Bean在配置文件中的定义包含init-method属性，执行指定的方法。  
-8. **After后置增强，初始化后**: 如果有BeanPostProcessors和Bean关联，这些bean的postProcessAfterInitialization() 方法将被调用。(AOP,动态代理)   
-
-    得到完整对象，context.getBean()   
-    关闭容器   
-    
- 9. 如果Bean实现了DisposableBean接口，它将调用destroy()方法。  
- 10. 当要销毁Bean的时候，如果Bean在配置文件中的定义包含destroy-method属性，执行指定的方法。
-
+1. 创建Bean实例（无参构造）
+2. 设置属性值或引用（set方法）
+3. 调用Bean的初始化方法（需自行设置，init-method）
+4. **将Bean实例传递给后置处理器，执行BeforeInitilization方法**
+5. 得到完整Bean对象
+6. **将Bean实例传递给后置处理器，执行AfterInitilization方法**
+7. 关闭容器时，调用销毁方法（需自行设置，destroy-method）
+ 
 ## 简述 Spring AOP 的原理
 JDK实现：Proxy.newProxyInstance() -> ProxyGenerator.generateProxyClass()生成字节码，继承Proxy，实现接口，将原方法重写为调用invoke()  
 Cglib实现：动态地生成要代理对象的子类，子类要重写被代理类所有不是final的方法。在子类中使用方法拦截技术拦截所有父类方法的调用（回调MethodInterceptor接口方法拦截），顺势织入自己的横切逻辑。比jdk动态代理要快。  
